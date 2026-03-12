@@ -1,11 +1,9 @@
 let history = [];
-let lastExpression = '';
 
 const num1Input = document.getElementById('num1');
 const num2Input = document.getElementById('num2');
 const operationSelect = document.getElementById('operation');
 const calcBtn = document.getElementById('calculateBtn');
-const currentResult = document.getElementById('currentResult');
 const errorMessage = document.getElementById('errorMessage');
 const historyList = document.getElementById('historyList');
 
@@ -16,12 +14,7 @@ function clearErrors() {
 }
 
 function validateNumber(value, input) {
-    if (value.trim() === '') {
-        input.classList.add('error');
-        return NaN;
-    }
-    
-    if (!/^-?\d*\.?\d+$/.test(value)) {
+    if (value === '' || value === null) {
         input.classList.add('error');
         return NaN;
     }
@@ -34,16 +27,6 @@ function validateNumber(value, input) {
     
     input.classList.remove('error');
     return num;
-}
-
-function getOperationSymbol(op) {
-    switch(op) {
-        case '+': return '+';
-        case '-': return '−';
-        case '*': return '×';
-        case '/': return '÷';
-        default: return op;
-    }
 }
 
 function formatNumber(num) {
@@ -67,12 +50,9 @@ function updateHistory() {
 function calculate() {
     clearErrors();
     
-    const val1 = num1Input.value;
-    const val2 = num2Input.value;
+    const num1 = validateNumber(num1Input.value, num1Input);
+    const num2 = validateNumber(num2Input.value, num2Input);
     const op = operationSelect.value;
-    
-    const num1 = validateNumber(val1, num1Input);
-    const num2 = validateNumber(val2, num2Input);
     
     if (isNaN(num1) || isNaN(num2)) {
         errorMessage.textContent = 'Введите числа';
@@ -96,18 +76,18 @@ function calculate() {
     const num1Str = formatNumber(num1);
     const num2Str = formatNumber(num2);
     const resultStr = formatNumber(result);
-    const opSymbol = getOperationSymbol(op);
     
-    const currentExpression = `${num1Str} ${opSymbol} ${num2Str} = ${resultStr}`;
+    let displayOp = op;
+    if (op === '*') displayOp = '×';
+    if (op === '/') displayOp = '÷';
     
-    if (lastExpression) {
-        history.unshift(lastExpression);
-        if (history.length > 3) history.pop();
-    }
+    const expression = `${num1Str} ${displayOp} ${num2Str} = ${resultStr}`;
     
-    lastExpression = currentExpression;
+    history.unshift(expression);
+    
+    if (history.length > 4) history.pop();
+    
     updateHistory();
-    currentResult.textContent = currentExpression;
 }
 
 num1Input.addEventListener('input', () => {
@@ -133,5 +113,3 @@ num1Input.addEventListener('keypress', (e) => {
 num2Input.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') calculate();
 });
-
-currentResult.textContent = '';

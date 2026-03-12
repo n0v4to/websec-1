@@ -47,6 +47,17 @@ body {
     line-height: 35px;
 }
 
+/* Скрываем стрелки у number input */
+.input-field[type="number"]::-webkit-inner-spin-button,
+.input-field[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.input-field[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
 .input-field.error {
     border: 2px dashed rgb(255, 0, 0);
     background-color: rgba(255, 0, 0, 0.1);
@@ -115,13 +126,11 @@ body {
     display: flex;
     flex-direction: column;
     gap: 2px;
-    margin-bottom: 2px;
 }
 
 .history-item {
     font-size: 16px;
     font-weight: 500;
-    color: rgba(255, 0, 0, 0.25);
     text-align: left;
     font-family: 'Courier New', monospace;
     background: transparent;
@@ -130,15 +139,10 @@ body {
     white-space: nowrap;
 }
 
-.current-result-field {
-    font-size: 18px;
-    font-weight: 500;
-    text-align: left;
-    background: rgb(186, 255, 194);
-    border: none;
-    word-break: break-word;
+.history-item:last-child {
     color: rgb(255, 0, 0);
-    font-family: 'Courier New', monospace;
-    line-height: 1.4;
-    margin-top: 2px;
+}
+
+.history-item:not(:last-child) {
+    color: rgba(255, 0, 0, 0.25);
 }
